@@ -33,7 +33,61 @@ address Alokasi(infotype X) {
     return P;
 }
 
+void BuildMorseTree(BinTree* tree) {
+    *tree = Alokasi("Root");
 
+    //  subtree di bawah Root (E dan T)
+    Left(*tree) = Alokasi("E");
+    Right(*tree) = Alokasi("T");
+
+    //  subtree untuk 'I' dan 'A' di bawah 'E'
+    Left(Left(*tree)) = Alokasi("I");
+    Right(Left(*tree)) = Alokasi("A");
+
+    //  subtree untuk 'S' dan 'U' di bawah 'I'
+    Left(Left(Left(*tree))) = Alokasi("S");
+    Right(Left(Left(*tree))) = Alokasi("U");
+
+    //  subtree untuk 'R' dan 'W' di bawah 'A'
+    Left(Right(Left(*tree))) = Alokasi("R");
+    Right(Right(Left(*tree))) = Alokasi("W");
+
+    //  subtree untuk 'N' dan 'M' di bawah 'T'
+    Left(Right(*tree)) = Alokasi("N");
+    Right(Right(*tree)) = Alokasi("M");
+
+    //  subtree untuk 'D' dan 'K' di bawah 'N'
+    Left(Left(Right(*tree))) = Alokasi("D");
+    Right(Left(Right(*tree))) = Alokasi("K");
+
+    //  subtree untuk 'G' dan 'O' di bawah 'M'
+    Left(Right(Right(*tree))) = Alokasi("G");
+    Right(Right(Right(*tree))) = Alokasi("O");
+
+    //  daun untuk subtree 'S'
+    Left(Left(Left(Left(*tree)))) = Alokasi("H");
+    Right(Left(Left(Left(*tree)))) = Alokasi("V");
+    Left(Right(Left(Left(*tree)))) = Alokasi("F");
+
+    //  daun untuk subtree 'U'
+    Right(Right(Left(Left(*tree)))) = Alokasi("L");
+
+    //  daun untuk subtree 'R'
+    Left(Left(Right(Left(*tree)))) = Alokasi("P");
+    Right(Left(Right(Left(*tree)))) = Alokasi("J");
+
+    //  daun untuk subtree 'W'
+    Left(Right(Right(Left(*tree)))) = Alokasi("B");
+    Right(Right(Right(Left(*tree)))) = Alokasi("X");
+
+    //  daun untuk subtree 'D'
+    Left(Left(Right(Right(*tree)))) = Alokasi("C");
+    Right(Left(Right(Right(*tree)))) = Alokasi("Y");
+
+    //  daun untuk subtree 'K'
+    Left(Right(Right(Right(*tree)))) = Alokasi("Z");
+    Right(Right(Right(Right(*tree)))) = Alokasi("Q");
+}
 
 BinTree Tree(infotype Akar, BinTree L, BinTree R) {
     BinTree P = Alokasi(Akar);
@@ -514,4 +568,30 @@ void morseToText(BinTree root, char* morse, char* result) {
         }
         token = strtok(NULL, " ");
     }
+}
+
+void convertFileToMorse(BinTree morseTree, const char *inputFile, const char *outputFile) {
+    FILE *fin, *fout;
+    char line[100];
+    char result[1000];  
+
+    fin = fopen(inputFile, "r");
+    fout = fopen(outputFile, "w");
+
+    if (fin == NULL || fout == NULL) {
+        printf("Error membuka file!\n");
+        return;
+    }
+
+    
+    while (fgets(line, sizeof(line), fin)) {
+        textToMorse(morseTree, line, result);  
+        fprintf(fout, "%s\n", result);  
+    }
+
+    
+    printf("Konversi file berhasil!\n");
+
+    fclose(fin);
+    fclose(fout);
 }

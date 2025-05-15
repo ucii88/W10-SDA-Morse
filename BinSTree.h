@@ -177,10 +177,11 @@ void DeAlokasi (address P);
 void PrintNodeLevel(BinTree P, int level);
 void InsertLast(ElmtList **L, infotype X);
 
+void BuildMorseTree(BinTree* tree);
 void printMorseCode(BinTree P, char* code, int level);
 char* decodeMorse(BinTree root, char* code);
 void findMorseCode(BinTree node, char target, char* result, char* currentCode);
 void textToMorse(BinTree root, char* text, char* result);
 void morseToText(BinTree root, char* morse, char* result);
-
+void convertFileToMorse(BinTree morseTree, const char *inputFile, const char *outputFile);
 #endif

@@ -291,7 +291,24 @@ int main() {
                 
             case 14:
                  // Konversi File Teks ke Morse
+            if (IsEmpty(morseTree)) {
+             printf("Tree kosong! Buat tree terlebih dahulu.\n");
+             } else {
+                char inputFile[100], outputFile[100];
+        
+                 printf("Masukkan nama file input: ");
+                fgets(inputFile, sizeof(inputFile), stdin);
+
+                printf("Masukkan nama file output: ");
+                fgets(outputFile, sizeof(outputFile), stdin);
+                outputFile[strcspn(outputFile, "\n")] = 0;  
+
+       
+                convertFileToMorse(morseTree, inputFile, outputFile);
+    }
             break;
+        default:
+        printf("Pilihan tidak valid!\n");   
             
             case 15:
                 // Exit logic
