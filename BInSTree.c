@@ -411,3 +411,76 @@ void DeAlokasi (address P) {
         free(P);
     }
 }
+
+// Fungsi untuk menampilkan huruf dan kode Morse-nya
+void printMorseCode(BinTree P, char* code, int level) {
+    if (IsEmpty(P)) {
+        return;
+    }
+    
+    if (Info(P)[0] != ' ') {
+        printf("%c: %s\n", Info(P), code);
+    }
+    
+    char leftCode[100];
+    strcpy(leftCode, code);
+    strcat(leftCode, ".");
+    printMorseCode(Left(P), leftCode, level + 1);
+    
+    char rightCode[100];
+    strcpy(rightCode, code);
+    strcat(rightCode, "-");
+    printMorseCode(Right(P), rightCode, level + 1);
+}
+
+// Fungsi untuk decoding karakter Morse
+char* decodeMorse(BinTree root, char* code) {
+    BinTree current = root;
+    
+    // Traversal berdasarkan kode
+    for (int i = 0; i < strlen(code); i++) {
+        if (code[i] == '.') {
+            // Ke kiri untuk titik
+            if (Left(current) == Nil) {
+                return NULL; 
+            }
+            current = Left(current);
+        } else if (code[i] == '-') {
+            // Ke kanan untuk dash
+            if (Right(current) == Nil) {
+                return NULL; 
+            }
+            current = Right(current);
+        } else {
+            return NULL; 
+        }
+    }
+    
+    return Info(current);  
+}
+
+// Fungsi untuk encoding karakter ke Morse
+void findMorseCode(BinTree node, char target, char* result, char* currentCode) {
+    if (IsEmpty(node)) {
+        return;
+    }
+    
+    if (Info(node)[0] == target) {
+        strcpy(result, currentCode);
+        return;
+    }
+    
+    // Coba ke kiri
+    char leftCode[100];
+    strcpy(leftCode, currentCode);
+    strcat(leftCode, ".");
+    findMorseCode(Left(node), target, result, leftCode);
+    
+    // Coba ke kanan kalo belum ketemu
+    if (strlen(result) == 0) {
+        char rightCode[100];
+        strcpy(rightCode, currentCode);
+        strcat(rightCode, "-");
+        findMorseCode(Right(node), target, result, rightCode);
+    }
+}

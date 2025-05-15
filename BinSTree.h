@@ -177,4 +177,8 @@ void DeAlokasi (address P);
 void PrintNodeLevel(BinTree P, int level);
 void InsertLast(ElmtList **L, infotype X);
 
+void printMorseCode(BinTree P, char* code, int level);
+char* decodeMorse(BinTree root, char* code);
+void findMorseCode(BinTree node, char target, char* result, char* currentCode);
+
 #endif
