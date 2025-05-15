@@ -249,10 +249,32 @@ int main() {
                 
             case 11:
                 // Konversi Teks ke Morse
+                printf("\n== Konversi Teks ke Morse ==\n");
+                if (IsEmpty(morseTree)) {
+                    printf("Tree kosong! Buat tree terlebih dahulu.\n");
+                } else {
+                    printf("Masukkan teks: ");
+                    fgets(input, sizeof(input), stdin);
+                    input[strcspn(input, "\n")] = 0; // Hapus newline
+                    
+                    textToMorse(morseTree, input, result);
+                    printf(" Morse: %s\n", result);
+                }
             break;
                 
             case 12:
                 // Konversi Morse ke Teks
+                printf("\n== Konversi Morse ke Teks ==\n");
+                if (IsEmpty(morseTree)) {
+                    printf("Tree kosong! Buat tree terlebih dahulu.\n");
+                } else {
+                    printf("Masukkan kode Morse (pisahkan dengan spasi): ");
+                    fgets(input, sizeof(input), stdin);
+                    input[strcspn(input, "\n")] = 0; // Hapus newline
+                    
+                    morseToText(morseTree, input, result);
+                    printf("Teks: %s\n", result);
+                }
             break;
                 
             case 13:

@@ -484,3 +484,34 @@ void findMorseCode(BinTree node, char target, char* result, char* currentCode) {
         findMorseCode(Right(node), target, result, rightCode);
     }
 }
+
+// Fungsi untuk mengkonversi teks ke kode Morse
+void textToMorse(BinTree root, char* text, char* result) {
+    result[0] = '\0';
+    char morseChar[100];
+    
+    for (int i = 0; i < strlen(text); i++) {
+        morseChar[0] = '\0';
+        findMorseCode(root, toupper(text[i]), morseChar, "");
+        
+        if (strlen(morseChar) > 0) {
+            strcat(result, morseChar);
+            strcat(result, " ");
+        }
+    }
+}
+
+// Fungsi untuk mengkonversi kode Morse ke teks
+void morseToText(BinTree root, char* morse, char* result) {
+    result[0] = '\0';
+    char* token = strtok(morse, " ");
+    
+    while (token != NULL) {
+        char *c = decodeMorse(root, token);
+        if (c != NULL && c[0] != '\0') {
+            char charStr[2] = {c[0], '\0'};
+            strcat(result, charStr);
+        }
+        token = strtok(NULL, " ");
+    }
+}
