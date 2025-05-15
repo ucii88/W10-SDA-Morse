@@ -237,3 +237,175 @@ void InsertLast(ElmtList **L, infotype X) {
         }
     }
 }
+
+void AddDaunTerkiri (BinTree *P, infotype X) {
+    if (IsEmpty(*P)) {
+        *P = Alokasi(X);
+    } else {
+        AddDaunTerkiri(&Left(*P), X);
+    }
+}
+void AddDaun (BinTree *P, infotype X, infotype Y, boolean Kiri) {
+    if (!IsEmpty(*P)) {
+        if (Info(*P) == X && Left(*P) == Nil && Right(*P) == Nil) {
+            if (Kiri) {
+                Left(*P) = Alokasi(Y);
+            } else {
+                Right(*P) = Alokasi(Y);
+            }
+        } else {
+            AddDaun(&Left(*P), X, Y, Kiri);
+            AddDaun(&Right(*P), X, Y, Kiri);
+        }
+    }
+}
+
+void DelDaunTerkiri (BinTree *P, infotype *X) {
+    if (Left(*P) == Nil && Right(*P) == Nil) {
+        *X = Info(*P);
+        DeAlokasi(*P);
+        *P = Nil;
+    } else if (Left(*P) != Nil) {
+        DelDaunTerkiri(&Left(*P), X);
+    } else {
+        DelDaunTerkiri(&Right(*P), X);
+    }
+}
+
+void DelDaun (BinTree *P, infotype X) {
+    if (!IsEmpty(*P)) {
+        if (Left(*P) == Nil && Right(*P) == Nil && Info(*P) == X) {
+            DeAlokasi(*P);
+            *P = Nil;
+        } else {
+            DelDaun(&Left(*P), X);
+            DelDaun(&Right(*P), X);
+        }
+    }
+}
+
+ListOfNode MakeListDaun (BinTree P) {
+    ListOfNode L = Nil;
+    if (!IsEmpty(P)) {
+        if (Left(P) == Nil && Right(P) == Nil) {
+            InsertLast(&L, Info(P));
+        } else {
+            ListOfNode LL = MakeListDaun(Left(P));
+            ListOfNode LR = MakeListDaun(Right(P));
+            if (LL != Nil) {
+                L = LL;
+                address1 Last = LL;
+                while (Next(Last) != Nil) {
+                    Last = Next(Last);
+                }
+                Next(Last) = LR;
+            } else {
+                L = LR;
+            }
+        }
+    }
+    return L;
+}
+
+ListOfNode MakeListPreOrder (BinTree P) {
+    ListOfNode L = Nil;
+    if (!IsEmpty(P)) {
+        InsertLast(&L, Info(P));
+        ListOfNode LL = MakeListPreOrder(Left(P));
+        ListOfNode LR = MakeListPreOrder(Right(P));
+        if (L != Nil) {
+            address1 Last = L;
+            while (Next(Last) != Nil) {
+                Last = Next(Last);
+            }
+            Next(Last) = LL;
+            if (LL != Nil) {
+                Last = LL;
+                while (Next(Last) != Nil) {
+                    Last = Next(Last);
+                }
+                Next(Last) = LR;
+            } else {
+                Next(Last) = LR;
+            }
+        }
+    }
+    return L;
+}
+
+void MakeListLevelHelper(BinTree P, int CurrLevel, int TargetLevel, ListOfNode *L) {
+    if (!IsEmpty(P)) {
+        if (CurrLevel == TargetLevel) {
+            InsertLast(L, Info(P));
+        } else if (CurrLevel < TargetLevel) {
+            MakeListLevelHelper(Left(P), CurrLevel + 1, TargetLevel, L);
+            MakeListLevelHelper(Right(P), CurrLevel + 1, TargetLevel, L);
+        }
+    }
+}
+
+ListOfNode MakeListLevel (BinTree P, int N) {
+    ListOfNode L = Nil;
+    MakeListLevelHelper(P, 1, N, &L);
+    return L;
+}
+
+boolean BSearch (BinTree P, infotype X) {
+    if (IsEmpty(P)) {
+        return false;
+    } else if (Info(P) == X) {
+        return true;
+    } else if (X < Info(P)) {
+        return BSearch(Left(P), X);
+    } else {
+        return BSearch(Right(P), X);
+    }
+}
+
+address BinSearch (BinTree P, infotype X) {
+    if (IsEmpty(P)) {
+        return Nil;
+    } else if (Info(P) == X) {
+        return P;
+    } else if (X < Info(P)) {
+        return BinSearch(Left(P), X);
+    } else {
+        return BinSearch(Right(P), X);
+    }
+}
+
+void InsSearch (BinTree *P, infotype X) {
+    if (IsEmpty(*P)) {
+        *P = Alokasi(X);
+    } else if (X < Info(*P)) {
+        InsSearch(&Left(*P), X);
+    } else if (X > Info(*P)) {
+        InsSearch(&Right(*P), X);
+    }
+}
+
+void DestroyTree(BinTree *P) {
+    if (!IsEmpty(*P)) {
+        DestroyTree(&Left(*P));
+        DestroyTree(&Right(*P));
+        DeAlokasi(*P);
+        *P = Nil;
+ }
+}
+
+void DelNode (BinTree *P) {
+    if (Right(*P) != Nil) {
+        DelNode(&Right(*P));
+    } else {
+        BinTree Q = *P;
+        *P = Left(*P);
+        DeAlokasi(Q);
+    }
+}
+
+void DeAlokasi (address P) {
+    if (P != Nil) {
+        free(P->info); 
+        free(P);
+    }
+}
