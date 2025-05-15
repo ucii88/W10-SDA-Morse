@@ -110,3 +110,130 @@ void PostOrder(BinTree P) {
         printf("%s ", Info(P));
     }
 }
+
+void PrintNodeLevel(BinTree P, int level) {
+    if (IsEmpty(P)) return;
+
+    if (level == 1) {
+        printf("Info node           : %s\n", Info(P));
+        if (!IsEmpty(Left(P)))
+            printf("Info node left son  : %s\n", Info(Left(P)));
+        else
+            printf("Info node left son  : Tidak ada\n");
+
+        if (!IsEmpty(Right(P)))
+            printf("Info node right son : %s\n", Info(Right(P)));
+        else
+            printf("Info node right son : Tidak ada\n");
+
+        printf("\n");
+    } else {
+        PrintNodeLevel(Left(P), level - 1);
+        PrintNodeLevel(Right(P), level - 1);
+    }
+}
+
+void PrintTree(BinTree P, int h) {
+    int d = Depth(P);
+    for (int i = 1; i <= d; i++) {
+        printf("Level %d:\n", i);
+        PrintNodeLevel(P, i);
+    }
+}
+
+boolean Search(BinTree P, infotype X) {
+    if (IsEmpty(P)) {
+        return false;
+    }
+    if (strcmp(Info(P), X) == 0) {
+        return true;
+    }
+    return Search(Left(P), X) || Search(Right(P), X);
+}
+
+int nbElmt(BinTree P) {
+    if (IsEmpty(P)) {
+        return 0;
+    } else {
+        return 1 + nbElmt(Left(P)) + nbElmt(Right(P));
+    }
+}
+
+int nbDaun(BinTree P) {
+    if (IsEmpty(P)) {
+        return 0;
+    } else if (Left(P) == Nil && Right(P) == Nil) {
+        return 1;
+    } else {
+        return nbDaun(Left(P)) + nbDaun(Right(P));
+    }
+}
+
+boolean IsSkewLeft(BinTree P) {
+    if (IsEmpty(P)) {
+        return true;
+    } else if (Right(P) != Nil) {
+        return false;
+    } else {
+        return IsSkewLeft(Left(P));
+    }
+}
+
+boolean IsSkewRight(BinTree P) {
+    if (IsEmpty(P)) {
+        return true;
+    } else if (Left(P) != Nil) {
+        return false;
+    } else {
+        return IsSkewRight(Right(P));
+    }
+}
+
+int Level(BinTree P, infotype X) {
+    if (IsEmpty(P)) {
+        return 0; // tidak ditemukan
+    }
+
+    if (strcmp(Info(P), X) == 0) {
+        return 1; // ditemukan di level 1
+    }
+
+    int leftLevel = Level(Left(P), X);
+    if (leftLevel > 0) {
+        return leftLevel + 1;
+    }
+
+    int rightLevel = Level(Right(P), X);
+    if (rightLevel > 0) {
+        return rightLevel + 1;
+    }
+
+    return 0; // tidak ditemukan di manapun
+}
+
+int Depth(BinTree P) {
+    if (IsEmpty(P)) {
+        return 0;
+    } else {
+        return 1 + Max(Depth(Left(P)), Depth(Right(P)));
+    }
+}
+
+ int Max(int a, int b) {
+    return (a > b) ? a : b;
+}
+
+void InsertLast(ElmtList **L, infotype X) {
+    address1 P = AlokasiList(X);  
+    if (P != NULL) {
+        if (*L == NULL) {
+            *L = P;  
+        } else {
+            address1 Last = *L;
+            while (Last->next != NULL) {  
+                Last = Last->next;
+            }
+            Last->next = P; 
+        }
+    }
+}
